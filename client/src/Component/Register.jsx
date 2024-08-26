@@ -13,7 +13,7 @@ export default function Register() {
   function registerUser(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/register", { name, user, email, pass })
+      .post("https://web-app-drab-three.vercel.app/register", { name, user, email, pass })
       .then(result => {console.log(result)
         navigate('/login')
         alert('register successfull')
