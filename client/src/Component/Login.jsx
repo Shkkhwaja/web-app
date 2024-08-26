@@ -9,7 +9,7 @@ export default function Login() {
 
 function handleLogin(e){
   e.preventDefault()
-  axios.post('https://web-app-drab-three.vercel.app/login',{user, pass}).then(result => {console.log(result)
+  axios.post('http://localhost:8000/login',{user, pass}).then(result => {console.log(result)
     if(result.data === "Success"){
       navigate('/home')
     }
