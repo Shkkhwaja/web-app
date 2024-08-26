@@ -12,8 +12,8 @@ export default function Register() {
 
   function registerUser(e) {
     e.preventDefault();
-    axios
-      .post("https://web-app-drab-three.vercel.app/register", { name, user, email, pass }) // Replace with your actual backend URL
+    
+    axios.post("https://web-app-drab-three.vercel.app/register", { name, user, email, pass })
       .then(result => {
         console.log(result);
         alert('Registration successful');
@@ -21,7 +21,15 @@ export default function Register() {
       })
       .catch(err => {
         console.error('Error registering:', err);
-        alert('Registration failed. Please try again.');
+
+        if (err.response) {
+          const errorMessage = err.response.data.error || 'Registration failed. Please try again.';
+          alert(errorMessage);
+        } else if (err.request) {
+          alert('No response from the server. Please check your network connection.');
+        } else {
+          alert('An unexpected error occurred. Please try again.');
+        }
       });
   }
 

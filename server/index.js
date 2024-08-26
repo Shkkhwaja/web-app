@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import userData from "./model/user.model.js";
 
-dotenv.config(); 
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 app.use(cors({
@@ -40,10 +40,17 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   userData.create(req.body)
-    .then((emp) => res.json(emp))
+    .then((emp) => res.status(201).json({ message: "Registration successful", user: emp }))
     .catch((err) => {
       console.error('Error during registration:', err);
-      res.status(500).json({ error: 'Internal server error' });
+      
+      if (err.name === 'ValidationError') {
+        res.status(400).json({ error: 'Validation error. Please check your input.' });
+      } else if (err.code === 11000) { // Duplicate key error for unique fields
+        res.status(400).json({ error: 'User already exists. Please choose a different username or email.' });
+      } else {
+        res.status(500).json({ error: 'Internal server error. Please try again later.' });
+      }
     });
 });
 
