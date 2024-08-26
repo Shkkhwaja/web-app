@@ -2,6 +2,11 @@ import React, {useState} from "react";
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
 export default function Login() {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
@@ -10,11 +15,21 @@ export default function Login() {
 function handleLogin(e){
   e.preventDefault()
   axios.post('https://web-app-api-nine.vercel.app/login',{user, pass}).then(result => {console.log(result)
-    if(result.data === "Success"){
-      navigate('/home')
+    if (result.data === "Success") {
+      toast.success("Login successful!");
+      setTimeout(() => {
+        navigate('/home');
+      },1000)
+    } else {
+      toast.error("Login failed, please try again.");
     }
 }).catch(err => console.log(err)
   )
+}
+
+function newRegister() {
+  navigate('/')
+
 }
 
   return (
@@ -39,10 +54,11 @@ function handleLogin(e){
               value={pass}
               onChange={(e) => setPass(e.target.value)}
             />
-            <button className="border-2 border-gray-500 mx-20 p-2 capitalize mt-2 bg-black text-white shadow-xl tracking-wide ">
+            <button className="border-2 border-gray-500 mx-24 p-2 capitalize mt-4 bg-black text-white shadow-xl tracking-wide ">
               login
             </button>
           </form>
+          <h2 className="capitalize text-blue-700 underline relative -left-4" onClick={newRegister}>new Register</h2>
         </div>
       </div>
     </div>

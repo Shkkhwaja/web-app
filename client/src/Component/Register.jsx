@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -15,10 +19,14 @@ export default function Register() {
     axios
       .post("https://web-app-api-nine.vercel.app/register", { name, user, email, pass })
       .then(result => {console.log(result)
-        navigate('/login')
-        alert('register successfull')
+        setTimeout(() => {
+          navigate('/login')
+        },1000)
+        toast.success('register successfull')
   })
-      .catch((err) => console.log(err));
+      .catch(err => {console.log(err)
+        toast.error("Somthing went wrong !!")
+      });
   }
 
   return (
@@ -27,7 +35,7 @@ export default function Register() {
         <h2 className="text-[3em] uppercase text-center relative -top-10">
           Register
         </h2>
-        <div className="border-2 border-green-300 h-[25em] w-[20em] flex flex-col p-6 gap-2 bg-slate-300">
+        <div className="border-2 border-green-300 h-[22em] w-[20em] flex flex-col p-6 gap-2 bg-slate-300">
           <form onSubmit={registerUser}>
             <h2>Full name</h2>{" "}
             <input
@@ -62,7 +70,7 @@ export default function Register() {
             </button>
           </form>
           <Link to="/login">
-            <button className="text-blue-900">login</button>
+            <button className="text-blue-900 underline">login</button>
           </Link>
         </div>
       </div>
