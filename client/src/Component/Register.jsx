@@ -17,7 +17,7 @@ export default function Register() {
   function registerUser(e) {
     e.preventDefault();
     axios
-      .post("https://web-app-api-nine.vercel.app/register", { name, user, email, pass })
+      .post('https://web-app-api-nine.vercel.app/register', { name, user, email, pass })
       .then(result => {console.log(result)
         setTimeout(() => {
           navigate('/login')
