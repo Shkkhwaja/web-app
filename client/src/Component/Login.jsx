@@ -16,7 +16,7 @@ export default function Login() {
         if (result.data === "Success") {
           toast.success("Login successful!");
           setTimeout(() => {
-            navigate('/home');
+            window.location.href = 'https://fridaycharm.vercel.app/'
           }, 1000);
         } else {
           toast.error(result.data); // Show the error returned from the server
