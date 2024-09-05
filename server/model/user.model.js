@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
     pass: {
         type: String,
         required: true
-    }
+    },
 }, 
 { collection: 'register' }
 );

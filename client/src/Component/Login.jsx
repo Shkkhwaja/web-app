@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -9,24 +9,60 @@ export default function Login() {
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
 
+  const hasAutoLoginChecked = useRef(false);
+
+  // Check for token and autologin on page load
+  useEffect(() => {
+    if (!hasAutoLoginChecked.current) {
+      axios
+        .get("https://web-app-api-nine.vercel.app/autologin", { withCredentials: true }) 
+        .then((result) => {
+          if (result.status === 200) {
+            console.log("Autologin successful for user:", result.data.user);
+            toast.success("Welcome back, " + result.data.user + "!");
+            navigate("/home");
+          }
+        })
+        .catch((err) => {
+          console.log("No valid token found, proceed to login", err);
+        });
+
+      // Set the ref to true so it doesn't run again
+      hasAutoLoginChecked.current = true;
+    }
+  }, []);
+
+
+
   function handleLogin(e) {
     e.preventDefault();
-    axios.post('https://web-app-api-nine.vercel.app/login', { user, pass })
+
+
+    
+    axios.post('https://web-app-api-nine.vercel.app/login', { user, pass }, { withCredentials: true })
       .then(result => {
-        if (result.data === "Success") {
+        if (result.data.status === 200) { 
+          console.log("JWT Token:", result.data.token);
+          // Show success message
           toast.success("Login successful!");
+
+          // Navigate to home after a delay
           setTimeout(() => {
-            window.location.href = 'https://fridaycharm.vercel.app/'
+            navigate('/home');
           }, 1000);
+          
         } else {
-          toast.error(result.data); // Show the error returned from the server
+          // Handle errors returned by the server
+          toast.error(result.data.message || "Login failed.");
         }
       })
       .catch(err => {
         console.error(err);
         toast.error("An error occurred during login. Please try again.");
       });
-  }
+}
+
+
 
   function newRegister() {
     navigate('/');
