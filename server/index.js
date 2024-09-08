@@ -10,10 +10,9 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}))
-
+    origin: 'https://web-app-front-lime.vercel.app',  
+    credentials: true,               
+}));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -21,7 +20,7 @@ app.use(cookieParser());
 // MongoDB connection
 mongoose.connect(process.env.MONGO_DB)
     .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log('MongoDB connection error:', err));
+    .catch(err => console.log(err));
 
 // Login route
 app.post("/login", async (req, res) => {
@@ -33,6 +32,9 @@ app.post("/login", async (req, res) => {
             if (isMatch) {
                 // Generate the JWT token
                 const token = jwt.sign({ user }, process.env.JWT_SECRET || "secretkey", { expiresIn: '7h' });
+
+                // Log the token to the console
+                console.log("Generated Token:", token);
 
                 // Set the token as a cookie with httpOnly and maxAge
                 res.cookie("token", token, {
@@ -83,11 +85,12 @@ app.get("/autologin", verifyToken, (req, res) => {
     res.status(200).json({ status: 200, user: req.user.user });
 });
 
+
 // Register route
 app.post("/register", (req, res) => {
     userData.create(req.body)
-        .then(user => res.status(201).json(user))
-        .catch(err => res.status(400).json({ message: "Error creating user", error: err }));
+        .then(emp => res.json(emp))
+        .catch(err => res.status(400).json(err));
 });
 
 // Test route
