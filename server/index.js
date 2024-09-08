@@ -9,12 +9,10 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-const corsOptions = {
-    origin: 'https://web-app-front-lime.vercel.app',
-    credentials: true,  // Enable credentials
-    optionsSuccessStatus: 200,  // For legacy browsers
-};
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true
+}))
 
 
 app.use(express.json());
